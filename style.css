@@ -1,0 +1,79 @@
+.errorMessage {
+    color : red;
+    display: none;
+}
+.show-error-message {
+    display: block !important;
+}
+body {
+    height: 100vh;
+    display : flex;
+    justify-content: center;
+    align-items: center;
+}
+.container {
+    background-color: bisque;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.task-input {
+    outline: none;
+}
+.task-input, .add {
+    padding : 0.5rem 1rem;
+}
+
+.add {
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(9, 166, 233);
+    color : white;
+}
+
+.list-container {
+    border: 1px solid grey;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.list-container li {
+    border-radius: 5px;
+    margin: 0.35rem 0.1rem;
+    padding: 0.25rem 1rem;
+    list-style: none;
+    border : 1px solid rgb(78, 78, 78);
+    display: flex;
+    justify-content: space-between;
+    gap : 0.5rem;
+}
+
+.list-container li button {
+    border:  none;
+    padding: 0.2rem 0.5rem;
+    font-size: 10px;
+    color : white;
+    border-radius: 5px;
+    margin-left: 7px;
+}
+.list-container li .delete {
+    background-color : red;
+}
+
+.list-container li .modify {
+    background-color: blue;
+}
+
+.submit-button {
+    color: black !important;
+}
+
+
+.save-all-elements {
+    border-radius: 5px;
+    color : white;
+    width: 100%;
+    padding : 0.25rem 1rem;
+    background-color: green;
+    border: none;
+}
