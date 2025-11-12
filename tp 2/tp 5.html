@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulaire d'inscription</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      form {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 350px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 5px;
+        margin-top: 5px;
+      }
+
+      input[disabled] {
+        background-color: #eee;
+      }
+
+      .error {
+        border: 2px solid red;
+      }
+
+      .slider-value {
+        font-weight: bold;
+        margin-left: 5px;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 8px 20px;
+        background-color: gray;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      #result {
+        font-size: 1.1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="inscription">
+      <h2>Formulaire d'inscription</h2>
+
+      <label>État civil :</label>
+      <select id="civilite">
+        <option value="">Choisir...</option>
+        <option value="M.">M.</option>
+        <option value="Mme">Mme</option>
+      </select>
+
+      <label>Nom :</label>
+      <input type="text" id="nom" />
+
+      <label>Prénom :</label>
+      <input type="text" id="prenom" />
+
+      <label>Nom complet :</label>
+      <input type="text" id="complet" disabled />
+
+      <label>Date de naissance :</label>
+      <input type="date" id="naissance" />
+
+      <label>Niveau en JavaScript :</label>
+      <input type="range" id="niveau" min="0" max="10" value="0" />
+      <span class="slider-value">0</span>
+
+      <label>Couleur préférée :</label>
+      <input type="color" id="couleur" />
+
+      <label>Mot de passe :</label>
+      <input type="password" id="mdp" />
+
+      <label>Confirmer le mot de passe :</label>
+      <input type="password" id="mdp2" />
+
+      <label>Afficher le mot de passe :</label>
+      <input type="checkbox" id="showPass" />
+
+      <label>Description :</label>
+      <textarea id="desc"></textarea>
+
+      <button type="reset" id="reset">Réinitialiser</button>
+      <button type="submit" id="submit" disabled>Envoyer</button>
+    </form>
+
+    <div id="result" style="display: none"></div>
+
+    <script>
+      $(document).ready(function () {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const dd = String(today.getDate()).padStart(2, "0");
+        const maxDate = `${yyyy}-${mm}-${dd}`;
+        const minDate = `${yyyy - 100}-${mm}-${dd}`;
+        $("#naissance").attr("min", minDate);
+        $("#naissance").attr("max", maxDate);
+
+        function updateComplet() {
+          const civ = $("#civilite").val();
+          const prenom = $("#prenom").val();
+          const nom = $("#nom").val();
+          $("#complet").val(civ + " " + prenom + " " + nom);
+        }
+
+        $("#civilite, #prenom, #nom").on("input change", updateComplet);
+
+        $("#niveau").on("input", function () {
+          $(".slider-value").text($(this).val());
+        });
+
+        $("#showPass").change(function () {
+          const type = $(this).is(":checked") ? "text" : "password";
+          $("#mdp, #mdp2").attr("type", type);
+        });
+
+        function validateForm() {
+          let valid = true;
+          $("input, select, textarea").each(function () {
+            const id = $(this).attr("id");
+            if (
+              id !== "complet" &&
+              id !== "showPass" &&
+              id !== "desc" &&
+              !$(this).val()
+            ) {
+              $(this).addClass("error");
+              valid = false;
+            } else {
+              $(this).removeClass("error");
+            }
+          });
+
+          const pass1 = $("#mdp").val();
+          const pass2 = $("#mdp2").val();
+          if (pass1 !== pass2) {
+            $("#mdp2").addClass("error");
+            valid = false;
+          } else {
+            $("#mdp2").removeClass("error");
+          }
+
+          $("#submit").prop("disabled", !valid);
+        }
+
+        $("input, select, textarea").on("input change", validateForm);
+
+        $("#inscription").on("submit", function (e) {
+          e.preventDefault();
+          const civ = $("#civilite").val();
+          const prenom = $("#prenom").val();
+          const nom = $("#nom").val();
+          const naissance = $("#naissance").val();
+          const niveau = $("#niveau").val();
+          const couleur = $("#couleur").val();
+          const desc = $("#desc").val();
+
+          const message = `Bonjour ${civ} ${prenom} ${nom}, vous êtes né(e) le ${naissance}. Votre niveau en JavaScript est ${niveau}/10, votre couleur préférée est ${couleur}. Description : ${desc}`;
+          $("#inscription").fadeOut(800, function () {
+            $("#result").text(message).fadeIn(800);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
