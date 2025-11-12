@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Défilement d'images</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+      }
+      #defile {
+        width: 400px;
+        height: 300px;
+        border: 2px solid #333;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #defile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        display: none;
+      }
+      button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: gray;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: darkgray;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Défilement d'images</h2>
+    <div id="defile">
+      <img src="./picture/1.jpg" alt="Image 1" />
+      <img src="./picture/2.jpg" alt="Image 2" />
+      <img src="./picture/3.jpg" alt="Image 3" />
+    </div>
+    <button id="next">Suivant</button>
+    <script>
+      $(document).ready(function () {
+        const $images = $("#defile img");
+        let index = 0;
+        $images.eq(index).show();
+        function nextImage() {
+          const current = $images.eq(index);
+          index = (index + 1) % $images.length;
+          const next = $images.eq(index);
+          next.css({ left: "100%", display: "block" });
+          current.animate({ left: "-100%" }, 600, function () {
+            current.hide();
+          });
+          next.animate({ left: "0%" }, 600);
+        }
+        $("#next").click(function () {
+          nextImage();
+        });
+        setInterval(nextImage, 5000 * 2);
+      });
+    </script>
+  </body>
+</html>
